@@ -48,11 +48,23 @@ const VideoCards = () => {
   const handelLoadedMetadata = (i,e) => setLoadedData((prevVideo) => [...prevVideo,e] )
 
   useEffect(() => {
-    const currentProgress = 0;
+    let currentProgress = 0;
     let span = videoSpanRef.current;
     if (span[videoId]) {
       let anim = gsap.to(span[videoId], {
-        onUpdate: () => {},
+        onUpdate: ( ) => {
+          const progress = Math.ceil(anim.progress() * 100);
+          if(progress != currentProgress ){
+            currentProgress = progress;
+            gsap.to(videoDivREf.current[videoId],{
+              width:window.innerWidth < 760 ? '10vw' : window.innerWidth < 1200 ? '10vw' : '4vw'
+            })
+            gsap.to(span[videoId],{
+              width: `${currentProgress}%` ,
+              backgroundColor:'white',
+            })
+          }
+        },
         onComplete: () => {},
       });
     }
